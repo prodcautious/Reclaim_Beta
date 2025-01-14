@@ -18,7 +18,6 @@ var current_location : String
 
 # Onready variables
 @onready var animated_sprite : AnimatedSprite2D = $AnimatedSprite2D
-@onready var player_interact_radius: Area2D = $PlayerInteractArea2D
 
 # Direction variables
 enum Direction { LEFT, RIGHT, UP, DOWN }
@@ -89,7 +88,7 @@ func _input(event: InputEvent) -> void:
 		var overlapping = interaction_area.get_overlapping_areas()
 		if overlapping.size() > 0:
 			var closest = get_closest_interactable(overlapping)
-			if closest.has_method("interact"):
+			if closest != null and closest.has_method("interact"):
 				closest.interact()
 
 # Check if the player is near an interactable object
@@ -103,3 +102,34 @@ func get_closest_interactable(areas):
 				min_distance = distance
 				closest = area
 	return closest
+
+#Save Methods
+func save_data() -> Dictionary:
+	return {
+		"position": {
+			"x": position.x,
+			"y": position.y
+		},
+		"current_health": current_health,
+		"max_health": max_health,
+		"current_location": current_location,
+		"current_player_direction": current_player_direction,
+		"current_player_state": current_player_state
+	}
+
+func load_data(data: Dictionary) -> void:
+	if data.is_empty():
+		return
+		
+	if data.has("current_health"):
+		current_health = data.current_health
+	if data.has("max_health"):
+		max_health = data.max_health
+	if data.has("current_location"):
+		current_location = data.current_location
+	if data.has("current_player_direction"):
+		current_player_direction = data.current_player_direction
+	if data.has("current_player_state"):
+		current_player_state = data.current_player_state
+	
+	update_animation()

@@ -16,21 +16,16 @@ func _ready():
 	$CollisionShape2D.shape = collision
 
 func interact() -> void:
-	print("Interact triggered")
 	if interact_type == InteractType.TELEPORT:
 		var player = get_tree().get_first_node_in_group("Player")
-		print("Player direction:", player.current_player_direction)
-		print("Required direction:", direction)
 		
 		if direction == player.current_player_direction:
-			print("Direction matched, starting teleport sequence")
 			var transition_screen = get_tree().get_first_node_in_group("TransitionScreen")
 			
 			if transition_screen == null:
 				print("Error: TransitionScreen not found!")
 				return
 				
-			print("Found transition screen")
 			
 			# Disconnect existing signals first
 			if transition_screen.is_connected("screen_black", _on_screen_black):
@@ -47,15 +42,12 @@ func interact() -> void:
 			# Small delay to ensure transition starts
 			await get_tree().create_timer(0.1, true).timeout
 			get_tree().paused = true
-			print("Called play_transition()")
 
 func _on_screen_black():
-	print("Screen is black, teleporting player")
 	var scene_manager = get_tree().root.get_node("SceneManager")
 	scene_manager.teleport_player(teleport_location)
 
 func _on_transition_completed():
-	print("Transition completed, unpausing game")
 	get_tree().paused = false
 	
 	# Clean up signals

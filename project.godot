@@ -14,6 +14,10 @@ config/name="Practice"
 config/features=PackedStringArray("4.3", "Forward Plus")
 config/icon="res://icon.svg"
 
+[autoload]
+
+SaveManager="*res://scripts/autoloads/save_manager.gd"
+
 [display]
 
 window/size/viewport_width=960

@@ -4,8 +4,10 @@ var paused : bool = false
 var controller_detected : bool = false
 var no_controller_detected : bool = false
 @onready var resume_button : Button = $CenterContainer/VBoxContainer/ResumeButton
+var player : CharacterBody2D
 
 func _ready():
+	player = get_tree().get_first_node_in_group("Player")
 	self.hide()
 
 func _process(delta: float) -> void:
@@ -46,6 +48,14 @@ func _on_resume_button_pressed() -> void:
 	get_tree().paused = false
 	self.hide()
 	print("Game Resumed")
+
+
+func _on_save_button_pressed() -> void:
+	if player:
+		SaveManager.save_game({
+			"player": player.save_data()
+		})
+
 
 func _on_quit_button_pressed() -> void:
 	get_tree().quit()

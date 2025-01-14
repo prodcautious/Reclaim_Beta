@@ -135,6 +135,25 @@ text = "Settings"
 [node name="ButtonAnimation" type="Node" parent="PauseMenu/CenterContainer/VBoxContainer/SettingsButton"]
 script = ExtResource("8_auhs2")
 
+[node name="SaveButton" type="Button" parent="PauseMenu/CenterContainer/VBoxContainer"]
+custom_minimum_size = Vector2(128, 64)
+layout_mode = 2
+theme_override_colors/font_hover_pressed_color = Color(0.341176, 0.313726, 0.317647, 1)
+theme_override_colors/font_hover_color = Color(0.54, 0.4968, 0.50184, 1)
+theme_override_colors/font_pressed_color = Color(0.34, 0.3128, 0.315973, 1)
+theme_override_colors/font_color = Color(0.741176, 0.678431, 0.686275, 1)
+theme_override_fonts/font = ExtResource("1_cxv5i")
+theme_override_font_sizes/font_size = 16
+theme_override_styles/focus = SubResource("StyleBoxEmpty_5gkvj")
+theme_override_styles/hover_pressed = SubResource("StyleBoxTexture_vclhv")
+theme_override_styles/hover = SubResource("StyleBoxTexture_k33ad")
+theme_override_styles/pressed = SubResource("StyleBoxTexture_ihvsb")
+theme_override_styles/normal = SubResource("StyleBoxTexture_0cenx")
+text = "Save"
+
+[node name="ButtonAnimation" type="Node" parent="PauseMenu/CenterContainer/VBoxContainer/SaveButton"]
+script = ExtResource("8_auhs2")
+
 [node name="QuitButton" type="Button" parent="PauseMenu/CenterContainer/VBoxContainer"]
 custom_minimum_size = Vector2(128, 64)
 layout_mode = 2
@@ -235,4 +254,5 @@ libraries = {
 [node name="Timer" type="Timer" parent="TransitionScreen"]
 
 [connection signal="pressed" from="PauseMenu/CenterContainer/VBoxContainer/ResumeButton" to="PauseMenu" method="_on_resume_button_pressed"]
+[connection signal="pressed" from="PauseMenu/CenterContainer/VBoxContainer/SaveButton" to="PauseMenu" method="_on_save_button_pressed"]
 [connection signal="pressed" from="PauseMenu/CenterContainer/VBoxContainer/QuitButton" to="PauseMenu" method="_on_quit_button_pressed"]
