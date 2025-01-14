@@ -1,0 +1,8 @@
+[gd_scene load_steps=2 format=3 uid="uid://b10doloba1eli"]
+
+[ext_resource type="Script" path="res://scripts/events/named_area_2d.gd" id="1_6nt6v"]
+
+[node name="NamedArea2D" type="Area2D" groups=["AreaName"]]
+script = ExtResource("1_6nt6v")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]

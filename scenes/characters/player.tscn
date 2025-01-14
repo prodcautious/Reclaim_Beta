@@ -347,7 +347,7 @@ animations = [{
 }]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_akt6q"]
-size = Vector2(10, 11)
+size = Vector2(10, 8)
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_82h3x"]
 
@@ -376,7 +376,7 @@ metadata/_aseprite_wizard_config_ = {
 metadata/_aseprite_wizard_source_file_hash_ = "7ee01f8dd0761bcbdc5b964616d81bcb"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-position = Vector2(0, 6.5)
+position = Vector2(0, 8)
 shape = SubResource("RectangleShape2D_akt6q")
 
 [node name="Camera2D" type="Camera2D" parent="."]

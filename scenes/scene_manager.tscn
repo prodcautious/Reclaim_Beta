@@ -1,4 +1,4 @@
-[gd_scene load_steps=14 format=4 uid="uid://dfv0mnvflk0r8"]
+[gd_scene load_steps=15 format=4 uid="uid://dfv0mnvflk0r8"]
 
 [ext_resource type="PackedScene" uid="uid://5vk5ibhcxyfp" path="res://scenes/ui/ui.tscn" id="1_bk3qk"]
 [ext_resource type="PackedScene" uid="uid://cwd3ce56jxp5h" path="res://scenes/characters/player.tscn" id="1_e5be7"]
@@ -8,6 +8,7 @@
 [ext_resource type="Texture2D" uid="uid://qja4dyp1hgqw" path="res://assets/textures/tiles/animated/spring_tree_collision.png" id="3_fbmxm"]
 [ext_resource type="Texture2D" uid="uid://du1xe6nfync21" path="res://assets/textures/tiles/indoor.png" id="5_ukvlr"]
 [ext_resource type="PackedScene" uid="uid://bs7pjixumb8es" path="res://scenes/events/interact_area_2d.tscn" id="6_7vgbh"]
+[ext_resource type="PackedScene" uid="uid://b10doloba1eli" path="res://scenes/events/named_area_2d.tscn" id="8_k7h28"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_fpk6a"]
 texture = ExtResource("1_ygvos")
@@ -96,7 +97,7 @@ texture_region_size = Vector2i(64, 32)
 0:1/animation_frame_14/duration = 0.4
 0:1/animation_frame_15/duration = 0.4
 0:1/0 = 0
-0:1/0/physics_layer_0/polygon_0/points = PackedVector2Array(16, 16, 15.2028, -19.799, -16.2635, -19.4454, -16, 16)
+0:1/0/physics_layer_0/polygon_0/points = PackedVector2Array(-16, -16, 16, -16, 16, 16, -16, 16)
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_3odra"]
 texture = ExtResource("2_qpanl")
@@ -116,7 +117,7 @@ texture_region_size = Vector2i(64, 32)
 0:0/animation_frame_12/duration = 0.4
 0:0/animation_frame_13/duration = 0.4
 0:0/animation_frame_14/duration = 0.4
-0:0/animation_frame_15/duration = 0.2
+0:0/animation_frame_15/duration = 0.4
 0:0/0 = 0
 0:0/0/y_sort_origin = 25
 0:1/animation_frame_0/duration = 0.4
@@ -134,7 +135,7 @@ texture_region_size = Vector2i(64, 32)
 0:1/animation_frame_12/duration = 0.4
 0:1/animation_frame_13/duration = 0.4
 0:1/animation_frame_14/duration = 0.4
-0:1/animation_frame_15/duration = 0.2
+0:1/animation_frame_15/duration = 0.4
 0:1/0 = 0
 0:1/0/y_sort_origin = -4
 0:1/0/physics_layer_0/polygon_0/points = PackedVector2Array(-5.25, 2.75, 5.75, 3.5, 6.5, 11.5, -5.25, 11)
@@ -259,5 +260,17 @@ position = Vector2(208, 912)
 collision_size = Vector2(16, 16)
 direction = 3
 teleport_location = Vector2(12, 1)
+
+[node name="AreaCollisions" type="Node2D" parent="."]
+
+[node name="NamedArea2D" parent="AreaCollisions" instance=ExtResource("8_k7h28")]
+position = Vector2(480, 272)
+area_name = "Weeping Woods"
+collision_size = Vector2(960, 540)
+
+[node name="NamedArea2D2" parent="AreaCollisions" instance=ExtResource("8_k7h28")]
+position = Vector2(208, 832)
+area_name = "Indoors"
+collision_size = Vector2(672, 544)
 
 [node name="UI" parent="." instance=ExtResource("1_bk3qk")]

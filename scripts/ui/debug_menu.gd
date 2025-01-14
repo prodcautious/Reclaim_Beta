@@ -3,6 +3,7 @@ extends Control
 @onready var fps_label : Label = $MarginContainer/VBoxContainer/FPSLabel
 @onready var player_pos_label : Label = $MarginContainer/VBoxContainer/PlayerPosLabel
 @onready var direction_label : Label = $MarginContainer/VBoxContainer/DirectionLabel
+@onready var location_label : Label = $MarginContainer/VBoxContainer/LocationLabel
 
 var debug : bool = false
 var scene_manager : Node = null
@@ -35,3 +36,4 @@ func _process(delta: float) -> void:
 	}
 	
 	direction_label.text = "Direction: " + direction_names[player.current_player_direction]
+	location_label.text = "Location: " + player.current_location

@@ -1,7 +1,7 @@
 extends CharacterBody2D
 
 # Export variables
-@export var movement_speed : float = 100.0
+@export var movement_speed : float = 120.0
 @export var current_health : float = 3.0
 @export var max_health : float = 3.0
 
@@ -13,6 +13,8 @@ enum PlayerState {
 
 var current_player_state : PlayerState = PlayerState.IDLE
 var previous_player_state : PlayerState = PlayerState.IDLE
+
+var current_location : String
 
 # Onready variables
 @onready var animated_sprite : AnimatedSprite2D = $AnimatedSprite2D
@@ -79,6 +81,7 @@ func _physics_process(delta: float) -> void:
 
 	update_animation()
 	move_and_slide() # Pass the velocity explicitly
+	
 
 # Interaction Handling
 func _input(event: InputEvent) -> void:
