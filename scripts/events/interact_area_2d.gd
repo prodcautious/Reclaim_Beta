@@ -1,6 +1,6 @@
 extends Area2D
 
-enum InteractType { DIALOGUE, TELEPORT }
+enum InteractType { DIALOGUE, TELEPORT, SAVE }
 enum Direction { LEFT, RIGHT, UP, DOWN }
 enum TransitionType { CIRCLE }
 

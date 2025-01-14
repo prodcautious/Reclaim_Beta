@@ -176,18 +176,24 @@ layout_mode = 2
 [node name="FPSLabel" type="Label" parent="DebugMenu/MarginContainer/VBoxContainer"]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.741176, 0.678431, 0.686275, 1)
+theme_override_colors/font_outline_color = Color(0.223529, 0.168627, 0.207843, 1)
+theme_override_constants/outline_size = 4
 theme_override_fonts/font = ExtResource("1_cxv5i")
 theme_override_font_sizes/font_size = 16
 
 [node name="PlayerPosLabel" type="Label" parent="DebugMenu/MarginContainer/VBoxContainer"]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.741176, 0.678431, 0.686275, 1)
+theme_override_colors/font_outline_color = Color(0.223529, 0.168627, 0.207843, 1)
+theme_override_constants/outline_size = 4
 theme_override_fonts/font = ExtResource("1_cxv5i")
 theme_override_font_sizes/font_size = 16
 
 [node name="DirectionLabel" type="Label" parent="DebugMenu/MarginContainer/VBoxContainer"]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.741176, 0.678431, 0.686275, 1)
+theme_override_colors/font_outline_color = Color(0.223529, 0.168627, 0.207843, 1)
+theme_override_constants/outline_size = 4
 theme_override_fonts/font = ExtResource("1_cxv5i")
 theme_override_font_sizes/font_size = 16
 
