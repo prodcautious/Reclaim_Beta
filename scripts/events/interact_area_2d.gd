@@ -25,7 +25,9 @@ func interact() -> void:
 			if transition_screen == null:
 				print("Error: TransitionScreen not found!")
 				return
-				
+
+			# Put player in teleport state
+			player.start_teleport()
 			
 			# Disconnect existing signals first
 			if transition_screen.is_connected("screen_black", _on_screen_black):
@@ -39,9 +41,9 @@ func interact() -> void:
 			
 			# Start transition before pausing
 			transition_screen.play_transition()
-			# Small delay to ensure transition starts
 			await get_tree().create_timer(0.1, true).timeout
 			get_tree().paused = true
+
 
 func _on_screen_black():
 	var scene_manager = get_tree().root.get_node("SceneManager")
@@ -49,7 +51,10 @@ func _on_screen_black():
 
 func _on_transition_completed():
 	get_tree().paused = false
-	
+	#Reset Player State
+	var player = get_tree().get_first_node_in_group("Player")
+	if player:
+		player.end_teleport()  # Reset teleport state
 	# Clean up signals
 	var transition_screen = get_tree().get_first_node_in_group("TransitionScreen")
 	if transition_screen and transition_screen.is_connected("screen_black", _on_screen_black):

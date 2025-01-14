@@ -174,6 +174,7 @@ text = "Quit"
 script = ExtResource("8_auhs2")
 
 [node name="DebugMenu" type="Control" parent="."]
+visible = false
 layout_mode = 3
 anchors_preset = 0
 offset_right = 40.0
@@ -244,6 +245,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+mouse_filter = 2
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="TransitionScreen"]
 process_mode = 3

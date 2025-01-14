@@ -28,18 +28,14 @@ func _process(delta: float) -> void:
 
 func _input(event: InputEvent) -> void:
 	if Input.is_action_just_pressed("pause"):
+		if player and player.current_player_state == player.PlayerState.TELEPORTING:
+			print("Cannot pause while teleporting.")
+			return  # Prevent pausing during teleportation
+
 		if paused:
-			paused = false
-			controller_detected = false
-			no_controller_detected = false
-			get_tree().paused = false
-			self.hide()
-			print("Game resumed.")
-		elif !paused:
-			paused = true
-			get_tree().paused = true
-			self.show()
-			print("Game paused.")
+			resume_game()
+		else:
+			pause_game()
 
 func _on_resume_button_pressed() -> void:
 	paused = false
@@ -59,3 +55,18 @@ func _on_save_button_pressed() -> void:
 
 func _on_quit_button_pressed() -> void:
 	get_tree().quit()
+
+
+func pause_game() -> void:
+	paused = true
+	get_tree().paused = true
+	self.show()
+	print("Game paused.")
+
+func resume_game() -> void:
+	paused = false
+	controller_detected = false
+	no_controller_detected = false
+	get_tree().paused = false
+	self.hide()
+	print("Game resumed.")

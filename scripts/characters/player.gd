@@ -8,6 +8,7 @@ extends CharacterBody2D
 enum PlayerState {
 	IDLE,
 	INTERACTING,
+	TELEPORTING,
 	WALKING
 }
 
@@ -102,6 +103,15 @@ func get_closest_interactable(areas):
 				min_distance = distance
 				closest = area
 	return closest
+	
+#Teleport State Handling
+func start_teleport():
+	current_player_state = PlayerState.TELEPORTING
+	set_physics_process(false)  # Disable physics while teleporting
+
+func end_teleport():
+	current_player_state = PlayerState.IDLE
+	set_physics_process(true)  # Re-enable physics after teleporting
 
 #Save Methods
 func save_data() -> Dictionary:
