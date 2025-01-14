@@ -1,0 +1,8 @@
+[gd_scene load_steps=2 format=3 uid="uid://bs7pjixumb8es"]
+
+[ext_resource type="Script" path="res://scripts/events/interact_area_2d.gd" id="1_oeojp"]
+
+[node name="InteractArea2D" type="Area2D" groups=["Interactable"]]
+script = ExtResource("1_oeojp")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]

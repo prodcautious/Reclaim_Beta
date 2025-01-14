@@ -1,0 +1,14 @@
+[remap]
+
+importer="aseprite_wizard.plugin.noop"
+type="PackedDataContainer"
+uid="uid://cfuru0ipivub7"
+path="res://.godot/imported/dialogue_arrow.ase-b8ece14a943c5e51c691b21fd7e23407.res"
+
+[deps]
+
+source_file="res://assets/textures/ui/dialogue/dialogue_arrow.ase"
+dest_files=["res://.godot/imported/dialogue_arrow.ase-b8ece14a943c5e51c691b21fd7e23407.res"]
+
+[params]
+

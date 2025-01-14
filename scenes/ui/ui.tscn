@@ -1,0 +1,223 @@
+[gd_scene load_steps=21 format=3 uid="uid://5vk5ibhcxyfp"]
+
+[ext_resource type="FontFile" uid="uid://barb5pmk7xx7n" path="res://assets/fonts/Minecraftia-Regular.ttf" id="1_cxv5i"]
+[ext_resource type="Script" path="res://scripts/ui/pause_menu.gd" id="1_xptqq"]
+[ext_resource type="Texture2D" uid="uid://cvw60qxkgpg51" path="res://assets/textures/ui/buttons/button_small_pressed.png" id="3_ipqh5"]
+[ext_resource type="Texture2D" uid="uid://cavmr3pjgkgl8" path="res://assets/textures/ui/buttons/button_small_hover.png" id="4_sxrld"]
+[ext_resource type="Texture2D" uid="uid://tb4qrsi7gjo6" path="res://assets/textures/ui/buttons/button_small_normal.png" id="5_v46x2"]
+[ext_resource type="Script" path="res://scripts/ui/debug_menu.gd" id="7_402t7"]
+[ext_resource type="Shader" path="res://shaders/scene_transition.gdshader" id="8_842k3"]
+[ext_resource type="Script" path="res://scripts/ui/button_animation.gd" id="8_auhs2"]
+[ext_resource type="Script" path="res://scripts/ui/transition_screen.gd" id="8_w3pbf"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_ua60b"]
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_vclhv"]
+texture = ExtResource("3_ipqh5")
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_k33ad"]
+texture = ExtResource("4_sxrld")
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_ihvsb"]
+texture = ExtResource("3_ipqh5")
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_0cenx"]
+texture = ExtResource("5_v46x2")
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_5gkvj"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_knn6j"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_a2yai"]
+shader = ExtResource("8_842k3")
+shader_parameter/circle_size = 0.0
+shader_parameter/circle_color = Color(0.223529, 0.168627, 0.207843, 1)
+
+[sub_resource type="Animation" id="Animation_0lhug"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("ColorRect:material:shader_parameter/circle_size")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [0.0]
+}
+
+[sub_resource type="Animation" id="Animation_55gny"]
+resource_name = "circle_transition"
+length = 0.5
+step = 0.1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("ColorRect:material:shader_parameter/circle_size")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.5),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [1.0, 0.0]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_8ynhe"]
+_data = {
+"RESET": SubResource("Animation_0lhug"),
+"circle_transition": SubResource("Animation_55gny")
+}
+
+[node name="UI" type="CanvasLayer"]
+
+[node name="PauseMenu" type="Control" parent="."]
+process_mode = 3
+visible = false
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("1_xptqq")
+
+[node name="CenterContainer" type="CenterContainer" parent="PauseMenu"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="PauseMenu/CenterContainer"]
+layout_mode = 2
+mouse_filter = 2
+
+[node name="ResumeButton" type="Button" parent="PauseMenu/CenterContainer/VBoxContainer"]
+custom_minimum_size = Vector2(128, 64)
+layout_mode = 2
+theme_override_colors/font_hover_pressed_color = Color(0.341176, 0.313726, 0.317647, 1)
+theme_override_colors/font_hover_color = Color(0.54, 0.4968, 0.50184, 1)
+theme_override_colors/font_pressed_color = Color(0.34, 0.3128, 0.315973, 1)
+theme_override_colors/font_color = Color(0.741176, 0.678431, 0.686275, 1)
+theme_override_fonts/font = ExtResource("1_cxv5i")
+theme_override_font_sizes/font_size = 16
+theme_override_styles/focus = SubResource("StyleBoxEmpty_ua60b")
+theme_override_styles/hover_pressed = SubResource("StyleBoxTexture_vclhv")
+theme_override_styles/hover = SubResource("StyleBoxTexture_k33ad")
+theme_override_styles/pressed = SubResource("StyleBoxTexture_ihvsb")
+theme_override_styles/normal = SubResource("StyleBoxTexture_0cenx")
+text = "Resume"
+
+[node name="ButtonAnimation" type="Node" parent="PauseMenu/CenterContainer/VBoxContainer/ResumeButton"]
+script = ExtResource("8_auhs2")
+
+[node name="SettingsButton" type="Button" parent="PauseMenu/CenterContainer/VBoxContainer"]
+custom_minimum_size = Vector2(128, 64)
+layout_mode = 2
+theme_override_colors/font_hover_pressed_color = Color(0.341176, 0.313726, 0.317647, 1)
+theme_override_colors/font_hover_color = Color(0.54, 0.4968, 0.50184, 1)
+theme_override_colors/font_pressed_color = Color(0.34, 0.3128, 0.315973, 1)
+theme_override_colors/font_color = Color(0.741176, 0.678431, 0.686275, 1)
+theme_override_fonts/font = ExtResource("1_cxv5i")
+theme_override_font_sizes/font_size = 16
+theme_override_styles/focus = SubResource("StyleBoxEmpty_5gkvj")
+theme_override_styles/hover_pressed = SubResource("StyleBoxTexture_vclhv")
+theme_override_styles/hover = SubResource("StyleBoxTexture_k33ad")
+theme_override_styles/pressed = SubResource("StyleBoxTexture_ihvsb")
+theme_override_styles/normal = SubResource("StyleBoxTexture_0cenx")
+text = "Settings"
+
+[node name="ButtonAnimation" type="Node" parent="PauseMenu/CenterContainer/VBoxContainer/SettingsButton"]
+script = ExtResource("8_auhs2")
+
+[node name="QuitButton" type="Button" parent="PauseMenu/CenterContainer/VBoxContainer"]
+custom_minimum_size = Vector2(128, 64)
+layout_mode = 2
+theme_override_colors/font_hover_pressed_color = Color(0.341176, 0.313726, 0.317647, 1)
+theme_override_colors/font_hover_color = Color(0.54, 0.4968, 0.50184, 1)
+theme_override_colors/font_pressed_color = Color(0.34, 0.3128, 0.315973, 1)
+theme_override_colors/font_color = Color(0.741176, 0.678431, 0.686275, 1)
+theme_override_fonts/font = ExtResource("1_cxv5i")
+theme_override_font_sizes/font_size = 16
+theme_override_styles/focus = SubResource("StyleBoxEmpty_knn6j")
+theme_override_styles/hover_pressed = SubResource("StyleBoxTexture_vclhv")
+theme_override_styles/hover = SubResource("StyleBoxTexture_k33ad")
+theme_override_styles/pressed = SubResource("StyleBoxTexture_ihvsb")
+theme_override_styles/normal = SubResource("StyleBoxTexture_0cenx")
+text = "Quit"
+
+[node name="ButtonAnimation" type="Node" parent="PauseMenu/CenterContainer/VBoxContainer/QuitButton"]
+script = ExtResource("8_auhs2")
+
+[node name="DebugMenu" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+script = ExtResource("7_402t7")
+
+[node name="MarginContainer" type="MarginContainer" parent="DebugMenu"]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+theme_override_constants/margin_left = 16
+theme_override_constants/margin_top = 16
+theme_override_constants/margin_right = 16
+theme_override_constants/margin_bottom = 16
+
+[node name="VBoxContainer" type="VBoxContainer" parent="DebugMenu/MarginContainer"]
+layout_mode = 2
+
+[node name="FPSLabel" type="Label" parent="DebugMenu/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.741176, 0.678431, 0.686275, 1)
+theme_override_fonts/font = ExtResource("1_cxv5i")
+theme_override_font_sizes/font_size = 16
+
+[node name="PlayerPosLabel" type="Label" parent="DebugMenu/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.741176, 0.678431, 0.686275, 1)
+theme_override_fonts/font = ExtResource("1_cxv5i")
+theme_override_font_sizes/font_size = 16
+
+[node name="DirectionLabel" type="Label" parent="DebugMenu/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.741176, 0.678431, 0.686275, 1)
+theme_override_fonts/font = ExtResource("1_cxv5i")
+theme_override_font_sizes/font_size = 16
+
+[node name="TransitionScreen" type="Control" parent="." groups=["TransitionScreen"]]
+process_mode = 3
+visible = false
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("8_w3pbf")
+
+[node name="ColorRect" type="ColorRect" parent="TransitionScreen"]
+material = SubResource("ShaderMaterial_a2yai")
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="TransitionScreen"]
+process_mode = 3
+libraries = {
+"": SubResource("AnimationLibrary_8ynhe")
+}
+
+[node name="Timer" type="Timer" parent="TransitionScreen"]
+
+[connection signal="pressed" from="PauseMenu/CenterContainer/VBoxContainer/ResumeButton" to="PauseMenu" method="_on_resume_button_pressed"]
+[connection signal="pressed" from="PauseMenu/CenterContainer/VBoxContainer/QuitButton" to="PauseMenu" method="_on_quit_button_pressed"]
