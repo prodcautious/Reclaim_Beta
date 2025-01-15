@@ -2,7 +2,7 @@ extends Node
 
 # Dictionary storing all dialogue data with structure:
 # - window_1, door_1, etc: Dialogue event IDs
-# - type: "sequential" (changes based on # of triggers) or "normal" (always same)
+# - type: "sequential" (changes based on # of triggers) or "normal" (always same) or "choice" (Self explanatory LOL)
 # - messages: Array of dialogue messages with text and voice type
 var dialogue_data = {
 	"weeping_woods_trees": {
@@ -18,6 +18,28 @@ var dialogue_data = {
 			}
 		]
 	},
+	"some_choice": {
+		"type": "choice",
+		"messages": [
+			{"text": "What will you do?", "voice": "voice_1"}
+		],
+		"choices": [
+			{"text": "Option A", "next_dialogue": "result_a"},
+			{"text": "Option B", "next_dialogue": "result_b"}
+		]
+	},
+	"result_a": {
+		"type": "normal",
+		"messages": [
+			{"text": "Cool, I respect that", "voice": "voice_1"}
+		]
+	},
+	"result_b": {
+		"type": "normal",
+		"messages": [
+			{"text": "Not super cool of you man.", "voice": "voice_1"}
+		]
+	},
 	"weeping_woods_window": {
 		"type": "sequential",
 		"messages": [
@@ -29,6 +51,15 @@ var dialogue_data = {
 				"text": "No more voyeurism.",
 				"voice": "voice_1"
 			}
+		]
+	},
+	"weeping_woods_tree_carving": {
+		"type": "normal",
+		"messages": [
+			{
+				"text": "The tree is etched with a heart and two initials, reading 'K + N.'",
+				"voice": "voice_1"
+			},
 		]
 	},
 	"npc_1": {
@@ -47,18 +78,21 @@ var dialogue_data = {
 }
 
 # System state variables
-var dialogue_active = false  # Whether dialogue is currently being shown
-var current_dialogue = []    # Current set of messages being displayed
-var dialogue_index = 0       # Index of current message in dialogue sequence
-var is_typing = false       # Whether text is currently being typed out
-var dialogue_state = {}      # Tracks how many times sequential dialogues triggered
+var dialogue_active = false
+var current_dialogue = []
+var dialogue_index = 0
+var is_typing = false
+var dialogue_state = {}
+var current_choices = []  # Store current available choices
+var waiting_for_choice = false  # Track if waiting for player choice
 
 # Signals for event handling
 signal dialogue_started
 signal dialogue_finished
 signal typing_finished
+signal choices_presented(choices)  # New signal for choice presentation
+signal choice_made(choice_index)   # New signal for choice selection
 
-# Initialize dialogue state tracking for sequential dialogues
 func _ready():
 	for dialogue_id in dialogue_data.keys():
 		if dialogue_data[dialogue_id]["type"] == "sequential":
@@ -66,20 +100,21 @@ func _ready():
 				"times_triggered": 0
 			}
 
-# Start dialogue sequence if not active, or show next line if already active
 func start_dialogue(dialogue_id: String):
 	if not dialogue_active:
 		if dialogue_data.has(dialogue_id):
 			var dialogue = dialogue_data[dialogue_id]
 			
-			# Handle based on dialogue type
-			if dialogue["type"] == "sequential":
-				handle_sequential_dialogue(dialogue_id)
-			else:
-				handle_normal_dialogue(dialogue_id)
+			match dialogue["type"]:
+				"sequential":
+					handle_sequential_dialogue(dialogue_id)
+				"choice":
+					handle_choice_dialogue(dialogue_id)
+				_:
+					handle_normal_dialogue(dialogue_id)
 		else:
 			print("Dialogue ID not found: " + dialogue_id)
-	elif not is_typing:
+	elif not is_typing and not waiting_for_choice:
 		show_next_line()
 
 # Handle sequential dialogues that change based on number of triggers
@@ -109,17 +144,59 @@ func handle_normal_dialogue(dialogue_id: String):
 	dialogue_active = true
 	show_next_line()
 
+# New function to handle choice dialogues
+func handle_choice_dialogue(dialogue_id: String):
+	var dialogue = dialogue_data[dialogue_id]
+	current_dialogue = dialogue["messages"]
+	current_choices = dialogue["choices"]
+	dialogue_index = 0
+	dialogue_active = true
+	show_next_line()
+
 # Display next line in current dialogue sequence
 func show_next_line():
 	if dialogue_index < current_dialogue.size():
 		is_typing = true
 		display_text(current_dialogue[dialogue_index].text, current_dialogue[dialogue_index].voice)
+		await get_tree().get_first_node_in_group("DialogueUI").typing_finished
 		dialogue_index += 1
+		
+		# If this is a choice dialogue and we've shown all messages, present choices
+		var current_dialogue_id = get_current_dialogue_id()
+		if dialogue_data[current_dialogue_id]["type"] == "choice" and dialogue_index >= current_dialogue.size():
+			present_choices()
 	else:
-		dialogue_active = false
-		is_typing = false
-		emit_signal("dialogue_finished")
-		print("Dialogue finished.")
+		if not waiting_for_choice:
+			dialogue_active = false
+			is_typing = false
+			emit_signal("dialogue_finished")
+			print("Dialogue finished.")
+
+# New function to present choices to the player
+func present_choices():
+	waiting_for_choice = true
+	emit_signal("choices_presented", current_choices)
+
+# Function to handle player choice selection
+func make_choice(choice_index: int):
+	if waiting_for_choice and choice_index < current_choices.size():
+		waiting_for_choice = false
+		emit_signal("choice_made", choice_index)
+		
+		# Start the next dialogue based on the choice
+		var next_dialogue = current_choices[choice_index]["next_dialogue"]
+		dialogue_active = false  # Reset dialogue state before starting new dialogue
+		if next_dialogue and dialogue_data.has(next_dialogue):
+			start_dialogue(next_dialogue)
+		else:
+			emit_signal("dialogue_finished")
+
+# Helper function to get current dialogue ID
+func get_current_dialogue_id() -> String:
+	for dialogue_id in dialogue_data.keys():
+		if dialogue_data[dialogue_id]["messages"] == current_dialogue:
+			return dialogue_id
+	return ""
 
 # Find dialogue UI node in scene tree
 func find_dialogue_box() -> Node:

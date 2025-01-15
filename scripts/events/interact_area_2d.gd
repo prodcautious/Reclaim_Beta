@@ -48,7 +48,7 @@ func interact() -> void:
 			await get_tree().create_timer(0.1, true).timeout
 			get_tree().paused = true
 	if interact_type == InteractType.DIALOGUE:
-		if direction == player.current_player_direction:
+		if direction == player.current_player_direction and not DialogueManager.is_typing and not DialogueManager.waiting_for_choice:
 			DialogueManager.start_dialogue(dialogue_id)
 
 
