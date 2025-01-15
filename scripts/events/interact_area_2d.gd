@@ -4,11 +4,16 @@ enum InteractType { DIALOGUE, TELEPORT, SAVE }
 enum Direction { LEFT, RIGHT, UP, DOWN }
 enum TransitionType { CIRCLE }
 
+@export_category("Main")
 @export var collision_size : Vector2
 @export var interact_type : InteractType = InteractType.TELEPORT
 @export var direction : Direction = Direction.UP
+@export_category("If InteractType.TELEPORT")
 @export var transition_type : TransitionType = TransitionType.CIRCLE
 @export var teleport_location : Vector2
+@export_category("If InteractType.DIALOGUE")
+@export var dialogue_id: String
+
 
 func _ready():
 	var collision = RectangleShape2D.new()
@@ -16,9 +21,8 @@ func _ready():
 	$CollisionShape2D.shape = collision
 
 func interact() -> void:
+	var player = get_tree().get_first_node_in_group("Player")
 	if interact_type == InteractType.TELEPORT:
-		var player = get_tree().get_first_node_in_group("Player")
-		
 		if direction == player.current_player_direction:
 			var transition_screen = get_tree().get_first_node_in_group("TransitionScreen")
 			
@@ -43,6 +47,9 @@ func interact() -> void:
 			transition_screen.play_transition()
 			await get_tree().create_timer(0.1, true).timeout
 			get_tree().paused = true
+	if interact_type == InteractType.DIALOGUE:
+		if direction == player.current_player_direction:
+			DialogueManager.start_dialogue(dialogue_id)
 
 
 func _on_screen_black():

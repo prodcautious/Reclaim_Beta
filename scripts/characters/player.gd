@@ -45,7 +45,8 @@ func update_animation():
 				animated_sprite.play("walk_Up")
 			Direction.DOWN:
 				animated_sprite.play("walk_Down")
-	elif current_player_state == PlayerState.IDLE:
+	elif current_player_state == PlayerState.IDLE or current_player_state == PlayerState.INTERACTING:
+		# Use idle animations for both IDLE and INTERACTING states
 		match current_player_direction:
 			Direction.LEFT:
 				animated_sprite.play("idle_Left")
@@ -60,29 +61,33 @@ func _process(delta: float) -> void:
 	pass
 
 func _physics_process(delta: float) -> void:
-	var input_direction = Input.get_vector("left", "right", "up", "down")
-	velocity = input_direction * movement_speed
+	# Only process movement if we're not in a state that should prevent it
+	if current_player_state != PlayerState.INTERACTING and current_player_state != PlayerState.TELEPORTING:
+		var input_direction = Input.get_vector("left", "right", "up", "down")
+		velocity = input_direction * movement_speed
 
-	# Update player state
-	if input_direction != Vector2.ZERO:
-		current_player_state = PlayerState.WALKING
+		# Update player state only if we're not in a special state
+		if input_direction != Vector2.ZERO:
+			current_player_state = PlayerState.WALKING
+		else:
+			current_player_state = PlayerState.IDLE
+
+		# Update player direction
+		if input_direction.x < 0:
+			current_player_direction = Direction.LEFT
+		elif input_direction.x > 0:
+			current_player_direction = Direction.RIGHT
+		elif input_direction.y < 0:
+			current_player_direction = Direction.UP
+		elif input_direction.y > 0:
+			current_player_direction = Direction.DOWN
+
+		move_and_slide()
 	else:
-		current_player_state = PlayerState.IDLE
-
-	# Update player direction
-	if input_direction.x < 0:
-		current_player_direction = Direction.LEFT
-	elif input_direction.x > 0:
-		current_player_direction = Direction.RIGHT
-	elif input_direction.y < 0:
-		current_player_direction = Direction.UP
-	elif input_direction.y > 0:
-		current_player_direction = Direction.DOWN
-
+		# Zero out velocity if we're in a state that prevents movement
+		velocity = Vector2.ZERO
+		
 	update_animation()
-	move_and_slide() # Pass the velocity explicitly
-	
-
 # Interaction Handling
 func _input(event: InputEvent) -> void:
 	if Input.is_action_just_pressed("interact"):

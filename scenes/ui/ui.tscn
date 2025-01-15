@@ -1,4 +1,4 @@
-[gd_scene load_steps=21 format=3 uid="uid://5vk5ibhcxyfp"]
+[gd_scene load_steps=31 format=3 uid="uid://5vk5ibhcxyfp"]
 
 [ext_resource type="FontFile" uid="uid://barb5pmk7xx7n" path="res://assets/fonts/Minecraftia-Regular.ttf" id="1_cxv5i"]
 [ext_resource type="Script" path="res://scripts/ui/pause_menu.gd" id="1_xptqq"]
@@ -9,6 +9,9 @@
 [ext_resource type="Shader" path="res://shaders/scene_transition.gdshader" id="8_842k3"]
 [ext_resource type="Script" path="res://scripts/ui/button_animation.gd" id="8_auhs2"]
 [ext_resource type="Script" path="res://scripts/ui/transition_screen.gd" id="8_w3pbf"]
+[ext_resource type="Script" path="res://scripts/ui/dialogue_ui.gd" id="10_087rr"]
+[ext_resource type="Texture2D" uid="uid://r8rpseytikie" path="res://assets/textures/ui/dialogue/dialogue_box.png" id="10_tpbi2"]
+[ext_resource type="Texture2D" uid="uid://ccngs2a8uhqta" path="res://scenes/ui/dialogue_arrow.png" id="11_cuvsj"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_ua60b"]
 
@@ -70,6 +73,93 @@ _data = {
 "RESET": SubResource("Animation_0lhug"),
 "circle_transition": SubResource("Animation_55gny")
 }
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_pc0e4"]
+texture = ExtResource("10_tpbi2")
+
+[sub_resource type="Animation" id="Animation_pkr8d"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Panel:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(240, 552)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Label:position")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(256, 564)]
+}
+
+[sub_resource type="Animation" id="Animation_pcvtm"]
+resource_name = "dialogue_box_slide"
+length = 0.2
+step = 0.1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Panel:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.2),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector2(240, 552), Vector2(240, 428)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Label:position")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.2),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector2(256, 564), Vector2(256, 440)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_02a6c"]
+_data = {
+"RESET": SubResource("Animation_pkr8d"),
+"dialogue_box_slide": SubResource("Animation_pcvtm")
+}
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ydgck"]
+atlas = ExtResource("11_cuvsj")
+region = Rect2(0, 0, 12, 14)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_2018q"]
+atlas = ExtResource("11_cuvsj")
+region = Rect2(12, 0, 12, 14)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_sr2tp"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ydgck")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_2018q")
+}],
+"loop": true,
+"name": &"default",
+"speed": 3.0
+}]
 
 [node name="UI" type="CanvasLayer"]
 
@@ -179,6 +269,7 @@ layout_mode = 3
 anchors_preset = 0
 offset_right = 40.0
 offset_bottom = 40.0
+mouse_filter = 2
 script = ExtResource("7_402t7")
 
 [node name="MarginContainer" type="MarginContainer" parent="DebugMenu"]
@@ -202,6 +293,14 @@ theme_override_fonts/font = ExtResource("1_cxv5i")
 theme_override_font_sizes/font_size = 16
 
 [node name="PlayerPosLabel" type="Label" parent="DebugMenu/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.741176, 0.678431, 0.686275, 1)
+theme_override_colors/font_outline_color = Color(0.223529, 0.168627, 0.207843, 1)
+theme_override_constants/outline_size = 4
+theme_override_fonts/font = ExtResource("1_cxv5i")
+theme_override_font_sizes/font_size = 16
+
+[node name="PlayerStateLabel" type="Label" parent="DebugMenu/MarginContainer/VBoxContainer"]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.741176, 0.678431, 0.686275, 1)
 theme_override_colors/font_outline_color = Color(0.223529, 0.168627, 0.207843, 1)
@@ -254,6 +353,68 @@ libraries = {
 }
 
 [node name="Timer" type="Timer" parent="TransitionScreen"]
+
+[node name="Dialogue_UI" type="Control" parent="." groups=["DialogueUI"]]
+visible = false
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("10_087rr")
+
+[node name="Panel" type="Panel" parent="Dialogue_UI"]
+custom_minimum_size = Vector2(480, 96)
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -240.0
+offset_top = 12.0
+offset_right = 240.0
+offset_bottom = 108.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_styles/panel = SubResource("StyleBoxTexture_pc0e4")
+
+[node name="Label" type="Label" parent="Dialogue_UI"]
+custom_minimum_size = Vector2(448, 64)
+layout_mode = 0
+offset_left = 256.0
+offset_top = 564.0
+offset_right = 704.0
+offset_bottom = 636.0
+theme_override_colors/font_color = Color(0.741176, 0.678431, 0.686275, 1)
+theme_override_fonts/font = ExtResource("1_cxv5i")
+theme_override_font_sizes/font_size = 16
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="Dialogue_UI"]
+libraries = {
+"": SubResource("AnimationLibrary_02a6c")
+}
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="Dialogue_UI"]
+texture_filter = 1
+position = Vector2(696, 504)
+sprite_frames = SubResource("SpriteFrames_sr2tp")
+metadata/_aseprite_wizard_interface_config_ = {
+"pending_changes": {}
+}
+metadata/_aseprite_wizard_config_ = {
+"layers": [],
+"o_ex_p": "",
+"o_folder": "",
+"o_name": "",
+"only_visible": false,
+"should_round_fps": true,
+"slice": "",
+"source": "res://assets/textures/ui/dialogue/dialogue_arrow.ase"
+}
+metadata/_aseprite_wizard_source_file_hash_ = "ae214aa8759541bcc4c739e90e939f7d"
 
 [connection signal="pressed" from="PauseMenu/CenterContainer/VBoxContainer/ResumeButton" to="PauseMenu" method="_on_resume_button_pressed"]
 [connection signal="pressed" from="PauseMenu/CenterContainer/VBoxContainer/SaveButton" to="PauseMenu" method="_on_save_button_pressed"]

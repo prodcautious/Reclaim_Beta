@@ -259,6 +259,18 @@ collision_size = Vector2(16, 16)
 direction = 3
 teleport_location = Vector2(6, -1)
 
+[node name="InteractArea2D3" parent="Interactables" instance=ExtResource("7_ylrli")]
+position = Vector2(176, -24)
+collision_size = Vector2(16, 32)
+interact_type = 0
+dialogue_id = "weeping_woods_trees"
+
+[node name="InteractArea2D4" parent="Interactables" instance=ExtResource("7_ylrli")]
+position = Vector2(240, -24)
+collision_size = Vector2(16, 32)
+interact_type = 0
+dialogue_id = "weeping_woods_trees"
+
 [node name="AreaCollisions" type="Node2D" parent="."]
 
 [node name="NamedArea2D" parent="AreaCollisions" instance=ExtResource("8_k7h28")]
