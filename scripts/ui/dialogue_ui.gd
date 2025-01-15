@@ -58,7 +58,6 @@ func display_text(text: String, voice: String):
 		SoundManager.play_dialogue_sound(voice)
 		await get_tree().create_timer(typing_speed).timeout
 	
-	# Only show arrow if we're not presenting choices
 	if not DialogueManager.waiting_for_choice:
 		arrow_sprite.show()
 		arrow_sprite.play("default")
@@ -82,7 +81,7 @@ func on_dialogue_finished():
 	label.text = ""
 	player.current_player_state = player.PlayerState.IDLE
 
-# New function to handle showing choices
+# Function to handle showing choices
 func on_choices_presented(choices: Array):
 	if choices.size() > 0:
 		arrow_sprite.hide()

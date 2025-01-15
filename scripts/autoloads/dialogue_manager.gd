@@ -144,7 +144,7 @@ func handle_normal_dialogue(dialogue_id: String):
 	dialogue_active = true
 	show_next_line()
 
-# New function to handle choice dialogues
+# Function to handle choice dialogues
 func handle_choice_dialogue(dialogue_id: String):
 	var dialogue = dialogue_data[dialogue_id]
 	current_dialogue = dialogue["messages"]
@@ -161,9 +161,9 @@ func show_next_line():
 		await get_tree().get_first_node_in_group("DialogueUI").typing_finished
 		dialogue_index += 1
 		
-		# If this is a choice dialogue and we've shown all messages, present choices
+		# If this is a choice dialogue and it's shown all messages, present choices
 		var current_dialogue_id = get_current_dialogue_id()
-		if dialogue_data[current_dialogue_id]["type"] == "choice" and dialogue_index >= current_dialogue.size():
+		if dialogue_data.has(current_dialogue_id) and dialogue_data[current_dialogue_id]["type"] == "choice" and dialogue_index >= current_dialogue.size():
 			present_choices()
 	else:
 		if not waiting_for_choice:
